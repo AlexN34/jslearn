@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>First React App</title>
+  <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+  <script src='https://unpkg.com/babel-standalone@6/babel.min.js'></script>
+</head>
+<body>
+  <div id='app'></div>
+
+  <script type='text/babel'>
+    function InactiveFriends(props) {
+        return (
+            <div>
+                <h2>Inactive Friends</h2>
+                <ul> {props.list.map((friend) => (
+                    <li key={friend.name}>
+                    <span>{friend.name}</span>
+                    <button onClick={() => props.onRemoveFriend(friend.name)}>Remove</button>
+                    <button onClick={() => props.onToggleFriend(friend.name)}>Activate</button>
+                    </li>
+                ))}</ul>
+            </div>
+)
+    }
+
+    function ActiveFriends(props) {
+        return (
+            <div>
+                <h2>Active Friends</h2>
+                <ul> {props.list.map((friend) => (
+                    <li key={friend.name}>
+                        <span>{friend.name}</span>
+                        <button onClick={() => props.onRemoveFriend(friend.name)}>Remove</button>
+                        <button onClick={() => props.onToggleFriend(friend.name)}>Deactivate</button>
+                    </li>
+                ))}</ul>
+            </div>
+        )
+    }
+    function FriendsList(props) {
+        return (
+          <ul> {props.list.map((friend) => (
+              <li key={friend.name}>
+                <span>{friend.name}</span>
+                <button onClick={() => props.onRemoveFriend(friend.name)}>Remove</button>
+                <button onClick={() => props.onToggleFriend(friend.name)}>Activate</button>
+              </li>
+          ))}</ul>
+        )
+    }
+
+    // class FriendsList extends React.Component {
+    //     //Arrow function to onClick causes fail - passing argument causes an invocation
+    //     constructor(props) {
+    //         super(props)
+    //         const toggleActiveLabel = 'Deactivate'
+
+    //         this.state = {
+    //             'activeLabel': toggleActiveLabel
+    //         }
+
+    //     }
+    //     render() {
+    //         return (
+    //       <ul> {props.list.map((name) => (
+    //           <li key={name}>
+    //             <span>{name}</span>
+    //             <button onClick={() => props.onRemoveFriend(name)}>Remove</button>
+    //             <button onClick={() => props.onDeactivateFriend(name)}>{this.state.activeLabel}</button>
+    //           </li>
+    //       ))}</ul>
+    //         )
+    //     }
+
+    // }
+
+    class App extends React.Component {
+        constructor(props) {
+            super(props) //invokes constructor of React.Component
+            this.state = {
+                // add variables to component
+                friends : [
+                    { name: 'Alex', active: true},
+                    { name: 'Not Alex', active: true},
+                    { name: 'Alex2', active: true},
+                ],
+                input: '',
+            }
+
+            // sticks this context to the App object inside handleRemoveFriend
+            this.handleRemoveFriend = this.handleRemoveFriend.bind(this)
+            //always have to bind this in constructor when passing event functions
+            // around
+            this.updateInput = this.updateInput.bind(this)
+            this.handleAddFriend = this.handleAddFriend.bind(this)
+            this.handleToggleFriend = this.handleToggleFriend.bind(this)
+
+            console.log('--constructor--')
+        }
+
+        componentDidMount() {
+            console.log('--componentDidMount--')
+            // ajax calls - lifecycle after loading component
+        }
+        
+        componentDidUpdate() {
+            console.log('--componentDidUpdate--')
+            // called when render() updates state
+        }
+
+        componentWillUnmount() {
+            console.log('--componentWillUnmount--')
+            // calls prior to destroy - good for closing listeners opened on mount
+        }
+
+
+
+        handleToggleFriend(name) {
+            this.setState((currentState) => {
+                const friend = currentState.friends.find((friend) => friend.name === name)
+                return {
+                    friends: currentState.friends.filter((friend) => friend.name !== name)
+                    .concat([{
+                        name, active: !friend.active
+                    }])
+                }
+            })
+        }
+
+        handleAddFriend() {
+            this.setState((currentState) => {
+                if (currentState.input !== ''){
+                    return {
+                        friends: currentState.friends.concat([{
+                            name: currentState.input,
+                            active: true,
+                        }]),
+                        input: '',
+                    }
+                }
+            })
+        }
+
+        handleRemoveFriend(name){
+            //avoids mutating state - makes it immutable
+            //directly changing property => react doesn't know there's an update
+            this.setState((currentState) => {
+                //only have to setstate on diff
+                return {
+                    friends: currentState.friends.filter((friend) => friend.name !== name)
+                }
+            })
+        }
+
+        updateInput(e) {
+            const value = e.target.value
+            //functional setstate - update diff in state
+            // to throwaway previous, just pass in object
+            this.setState(()=> ({
+                input: value
+            }))
+        }
+
+        getFriends(active) {
+            //console.log(this.state.active)
+            return this.state.friends.filter((friend) => friend.active === active)
+        }
+
+        //Controlled component - variables determine ui, not html
+        render() {
+            console.log('--render--')
+            return (
+            <div>
+                <input 
+                    placeholder='new friend' 
+                    type='text' 
+                    value={this.state.input}
+                    onChange={this.updateInput}
+                    />
+                <button onClick={this.handleAddFriend}>Submit</button>
+                <div>
+                    <button onClick={() => this.setState({
+                        friends: []
+                    })}>Clear all</button>
+                </div>
+                <ActiveFriends
+                    list={this.getFriends(true)}
+                    onRemoveFriend={this.handleRemoveFriend}
+                    onToggleFriend={this.handleToggleFriend}
+                />
+                <InactiveFriends
+                    list={this.getFriends(false)}
+                    onRemoveFriend={this.handleRemoveFriend}
+                    onToggleFriend={this.handleToggleFriend}
+                />
+            </div>
+            )
+        }
+    }
+    // function App () {
+    //     const friends = ['Alex', 'Not Alex', 'Alex2']
+    //     return (
+    //     <div>
+    //         <FriendsList list={friends}/>
+    //     </div>
+    //     )
+    // }
+
+    ReactDOM.render(
+      <App />,
+      document.getElementById('app')
+    )
+  </script>
+</body>
+</html>
