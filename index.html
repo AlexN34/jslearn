@@ -8,8 +8,56 @@
 </head>
 <body>
   <div id='app'></div>
+  <script>
+      window.API = {
+          fetchFriends() {
+              return new Promise((res, rej) => {
+                const friends = [
+                    { name: 'Alex', active: true},
+                    { name: 'Not Alex', active: true},
+                    { name: 'Alex2', active: true},
+                ]
+                setTimeout(() => res(friends), 2000) // wait 2s, give friends array
+              })
+          }
+      }
+  </script>     
 
   <script type='text/babel'>
+    class Loading extends React.Component {
+        constructor(props) {
+            super(props)
+            this.state = {
+                text: 'Loading'
+            }
+        }
+
+        componentDidMount() {
+            
+            const stopper = this.state.text + '...'
+            this.interval = window.setInterval(() => {
+                this.state.text === stopper 
+                ? this.setState({text: 'Loading'}) 
+                : this.setState((currentState) => {
+                    return {
+                        text: currentState.text + '.'
+                    }
+                })
+            }, 300)
+        }
+
+        componentWillUnmount() {
+            // release setinterval by accessing set variable
+            window.clearInterval(this.interval) // give clearInterval interval function to clear it
+        }
+
+        render() {
+            return <p>{this.state.text}</p>
+        }
+    }
+
+
+
     function InactiveFriends(props) {
         return (
             <div>
@@ -81,12 +129,9 @@
             super(props) //invokes constructor of React.Component
             this.state = {
                 // add variables to component
-                friends : [
-                    { name: 'Alex', active: true},
-                    { name: 'Not Alex', active: true},
-                    { name: 'Alex2', active: true},
-                ],
+                friends : [ ],
                 input: '',
+                loading: true,
             }
 
             // sticks this context to the App object inside handleRemoveFriend
@@ -103,6 +148,12 @@
         componentDidMount() {
             console.log('--componentDidMount--')
             // ajax calls - lifecycle after loading component
+            API.fetchFriends().then((friends) => {
+                this.setState({ // can set friends in place of friends: friends (ES6 syntax)
+                    friends,
+                    loading: false
+                })
+            })
         }
         
         componentDidUpdate() {
@@ -114,12 +165,6 @@
             console.log('--componentWillUnmount--')
             // calls prior to destroy - good for closing listeners opened on mount
         }
-
-        static getDerivedStateFromProps() {
-            // rare - set props on local state of component
-        }
-
-
 
         handleToggleFriend(name) {
             this.setState((currentState) => {
@@ -175,6 +220,9 @@
         //Controlled component - variables determine ui, not html
         render() {
             console.log('--render--')
+            if (this.state.loading === true) {
+                return <Loading/>
+            }
             return (
             <div>
                 <input 
