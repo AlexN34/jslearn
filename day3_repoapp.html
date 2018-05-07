@@ -55,11 +55,26 @@
       }
     }
 
+    function Nav (props) {
+      const languages = ['all', 'javascript', 'ruby', 'python']
+      return (
+        <nav> 
+            <ul> {languages.map((language) => (
+              <li key={language}>
+                <span onClick={() => {}}>{language}</span>
+              </li>
+              ))}
+            </ul>
+        </nav>
+      )
+    }
+
     class App extends React.Component {
         constructor(props) {
             super(props)
             this.state = {
-                languages: ['all', 'javascript', 'ruby', 'python'],
+                repos: [],
+                activeLanguage: 'all'
                 loading: true,
             }
         }
@@ -72,6 +87,8 @@
         componentDidUpdate(prevState, newState) {
             //fetch API with new stuff (current selection?)
         }
+
+        handleSelectLanguage()
 
         fetchRepo(language) {
           this.state.loading = true
@@ -89,12 +106,7 @@
             }
             return (
                 <div>
-                  <ul> {this.state.languages.map((language) => (
-                      <li key={language}>
-                        <span onClick={() => this.fetchRepo(language)}>{language}</span>
-                      </li>
-                    ))}
-                  </ul>
+                  <Nav/>
                   <ul> {this.state.repos.map((repo) => {
                     <li key={repo.id}>
                        <span>{repo.name}</span>
