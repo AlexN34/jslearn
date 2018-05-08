@@ -4,8 +4,7 @@ import Home from './Home';
 import About from './About';
 import Topics from './Topics';
 
-class App extends Component {
-  render() {
+function App(){
     return (
       <BrowserRouter>
         {/* Only one needed at app root so react-router can pass props down to components*/}
@@ -24,8 +23,7 @@ class App extends Component {
           <Route path='/other' component={Topics}/>
         </div>
       </BrowserRouter>
-    );
-  }
+    )
 }
 
 export default App;
