@@ -1,0 +1,32 @@
+Arguments: 
+  /usr/bin/node /usr/bin/yarn start
+
+PATH: 
+  /home/alex/Envs/base/bin:/home/alex/.pyenv/plugins/pyenv-virtualenvwrapper/shims:/home/alex/.pyenv/libexec:/home/alex/.pyenv/plugins/python-build/bin:/home/alex/.pyenv/plugins/pyenv-virtualenvwrapper/bin:/home/alex/.pyenv/plugins/pyenv-virtualenv/bin:/home/alex/.pyenv/plugins/pyenv-update/bin:/home/alex/.pyenv/plugins/pyenv-installer/bin:/home/alex/.pyenv/plugins/pyenv-doctor/bin:/home/alex/.pyenv/shims:/home/alex/.gem/ruby/2.5.0/bin:/home/alex/.pyenv/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl
+
+Yarn version: 
+  1.5.1
+
+Node version: 
+  9.9.0
+
+Platform: 
+  linux x64
+
+npm manifest: 
+  No manifest
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
+
+Trace: 
+  Error: Couldn't find a package.json file in "/home/alex/Sync/workspace/learn/react"
+      at new MessageError (/usr/lib/node_modules/yarn/lib/cli.js:186:110)
+      at /usr/lib/node_modules/yarn/lib/cli.js:40048:15
+      at Generator.next (<anonymous>)
+      at step (/usr/lib/node_modules/yarn/lib/cli.js:98:30)
+      at /usr/lib/node_modules/yarn/lib/cli.js:109:13
+      at <anonymous>
