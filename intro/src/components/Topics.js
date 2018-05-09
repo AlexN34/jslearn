@@ -1,12 +1,10 @@
-import React from 'react';
-import { Link, Route } from 'react-router-dom';
-
+import React from "react";
+import { Link, Route } from "react-router-dom";
 
 // match is prop that react router passes to anything it renders
 function Topic({ match }) {
   return <h3>{match.params.topicId}</h3>;
 }
-
 
 export default function Topics({ match }) {
   return (
@@ -35,19 +33,4 @@ export default function Topics({ match }) {
       />
     </div>
   );
-}
-
-// Tells react router what type to expect?
-Topics.propTypes = {
-  match: React.PropTypes.shape({
-    url: React.PropTypes.string.isRequired,
-    path: React.PropTypes.string.isRequired,
-  }).isRequired,
-}
-
-Topic.propTypes = {
-  match: React.PropTypes.shape({
-    url: React.PropTypes.string.isRequired,
-    path: React.PropTypes.string.isRequired,
-  }).isRequired,
 }
